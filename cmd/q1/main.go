@@ -39,20 +39,22 @@ func main() {
 	csvFile.SetColumn(columnStrings)
 	for _, row := range data {
 		record := make([]string, len(columnStrings))
+		isValid := true
 		for key, value := range row {
 			if key == "STATUS" {
 				if value != moveStatus {
-					continue
+					isValid = false
 				}
-			}
-			if key == "POSITION" {
+			} else if key == "POSITION" {
 				if !strings.Contains("Airhostess,Pilot,Steward", value) {
-					continue
+					isValid = false
 				}
-			}
-			if key == "HIRED" {
+			} else if key == "HIRED" {
 				date, _ := time.Parse("02-01-2006", value)
-				fmt.Println(time.Now().Sub(date))
+				date = time.Time{}.Add(time.Now().Sub(date))
+				if date.Year() < 3 {
+					isValid = false
+				}
 			}
 			for i, c := range columnStrings {
 				if key == c {
@@ -61,7 +63,9 @@ func main() {
 				}
 			}
 		}
-		csvFile.AddRecord(record)
+		if isValid {
+			csvFile.AddRecord(record)
+		}
 	}
 	err = csvFile.BuildCsvFile()
 	if err != nil {
