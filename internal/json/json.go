@@ -5,8 +5,8 @@ import (
 	"os"
 )
 
-func ExportToJsonFile(records []map[string]interface{}) error {
-	csvFile, err := os.Create("DevMountainAnwser.json")
+func ExportToJsonFile(records []map[string]interface{}, fileName string) error {
+	csvFile, err := os.Create(fileName + ".json")
 	if err != nil {
 		return err
 	}
