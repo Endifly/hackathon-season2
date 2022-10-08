@@ -1,6 +1,8 @@
 package csv
 
 import (
+	"encoding/csv"
+	"io"
 	"os"
 	"strings"
 )
@@ -74,4 +76,41 @@ func (c *CsvData) AddRecord(data []string) {
 		}
 	}
 	c.Records = append(c.Records, sb.String())
+}
+
+// this for creating the answer so we will using lib
+func ReadCSV(filePath string) []map[string]interface{} {
+	isFirstRow := true
+	headerList := []string{}
+	// Load a csv file.
+	csvFile, _ := os.Open(filePath)
+	var records []map[string]interface{}
+	// Create a new reader.
+	r := csv.NewReader(csvFile)
+	for {
+		// Read row
+		record, err := r.Read()
+
+		// Stop at EOF.
+		if err == io.EOF {
+			break
+		} else
+		// Handle first row case
+		if isFirstRow {
+			isFirstRow = false
+
+			// Store list: column/property name
+			headerList = append(headerList, record...)
+
+			// Skip next code
+			continue
+		}
+		row := make(map[string]interface{})
+		//map by  using key from header as column
+		for i, data := range record {
+			row[headerList[i]] = data
+		}
+		records = append(records, row)
+	}
+	return records
 }
