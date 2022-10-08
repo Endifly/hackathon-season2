@@ -1,7 +1,6 @@
 package csv
 
 import (
-	"fmt"
 	"os"
 	"strings"
 )
@@ -32,8 +31,6 @@ func (c *CsvData) BuildCsvFile() error {
 }
 
 func prepareRow(rows []string, file *os.File) error {
-
-	fmt.Println(rows)
 	for i, s := range rows {
 		var sb strings.Builder
 		sb.WriteString(s)
