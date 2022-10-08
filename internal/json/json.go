@@ -5,21 +5,30 @@ import (
 	"os"
 )
 
-func ExportToJsonFile(records []map[string]interface{}) error {
-	csvFile, err := os.Create("DevMountainAnwser.json")
+func ExportToJsonFile(records []map[string]interface{}, fileName string) error {
+	csvFile, err := os.Create(fileName + ".json")
 	if err != nil {
 		return err
 	}
+	// adjust format of output
+	csvFile.WriteString("[\n")
 	defer csvFile.Close()
-	for _, row := range records {
-		jsonStr, err := json.Marshal(row)
+	for i, row := range records {
+		jsonStr, err := json.MarshalIndent(row, "", " ")
 		if err != nil {
 			return err
 		}
-		_, err = csvFile.WriteString(string(jsonStr))
+		//only add "," if not the last row
+		str := string(jsonStr)
+		if i != len(records)-1 {
+			str = str + ","
+		}
+		_, err = csvFile.WriteString(str)
 		if err != nil {
 			return err
 		}
 	}
+	// adjust format of output
+	csvFile.WriteString("\n]")
 	return nil
 }

@@ -1,6 +1,8 @@
 package csv
 
 import (
+	"encoding/csv"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -74,4 +76,43 @@ func (c *CsvData) AddRecord(data []string) {
 		}
 	}
 	c.Records = append(c.Records, sb.String())
+}
+
+// CSVFileToMap  reads csv file into slice of map
+func CSVFileToMap(filePath string) (returnMap []map[string]interface{}, err error) {
+
+	// read csv file
+	csvfile, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	defer csvfile.Close()
+
+	reader := csv.NewReader(csvfile)
+
+	rawCSVdata, err := reader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	header := []string{} // holds first row (header)
+	for lineNum, record := range rawCSVdata {
+
+		// for first row, build the header slice
+		if lineNum == 0 {
+			str := strings.Split(record[0], ";")
+			header = append(header, str...)
+		} else {
+			// for each cell, map[string]string k=header v=value
+			line := make(map[string]interface{})
+			str := strings.Split(record[0], ";")
+			for i := 0; i < len(str); i++ {
+				line[header[i]] = str[i]
+			}
+			returnMap = append(returnMap, line)
+		}
+	}
+
+	return
 }
