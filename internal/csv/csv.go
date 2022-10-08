@@ -2,7 +2,7 @@ package csv
 
 import (
 	"encoding/csv"
-	"io"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -78,39 +78,41 @@ func (c *CsvData) AddRecord(data []string) {
 	c.Records = append(c.Records, sb.String())
 }
 
-// this for creating the answer so we will using lib
-func ReadCSV(filePath string) []map[string]interface{} {
-	isFirstRow := true
-	headerList := []string{}
-	// Load a csv file.
-	csvFile, _ := os.Open(filePath)
-	var records []map[string]interface{}
-	// Create a new reader.
-	r := csv.NewReader(csvFile)
-	for {
-		// Read row
-		record, err := r.Read()
+// CSVFileToMap  reads csv file into slice of map
+func CSVFileToMap(filePath string) (returnMap []map[string]interface{}, err error) {
 
-		// Stop at EOF.
-		if err == io.EOF {
-			break
-		} else
-		// Handle first row case
-		if isFirstRow {
-			isFirstRow = false
-
-			// Store list: column/property name
-			headerList = append(headerList, record...)
-
-			// Skip next code
-			continue
-		}
-		row := make(map[string]interface{})
-		//map by  using key from header as column
-		for i, data := range record {
-			row[headerList[i]] = data
-		}
-		records = append(records, row)
+	// read csv file
+	csvfile, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
 	}
-	return records
+
+	defer csvfile.Close()
+
+	reader := csv.NewReader(csvfile)
+
+	rawCSVdata, err := reader.ReadAll()
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	header := []string{} // holds first row (header)
+	for lineNum, record := range rawCSVdata {
+
+		// for first row, build the header slice
+		if lineNum == 0 {
+			str := strings.Split(record[0], ";")
+			header = append(header, str...)
+		} else {
+			// for each cell, map[string]string k=header v=value
+			line := make(map[string]interface{})
+			str := strings.Split(record[0], ";")
+			for i := 0; i < len(str); i++ {
+				line[header[i]] = str[i]
+			}
+			returnMap = append(returnMap, line)
+		}
+	}
+
+	return
 }

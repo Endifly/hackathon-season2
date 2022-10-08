@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/markkj/hackathon-season2/internal/csv"
+	"github.com/markkj/hackathon-season2/internal/json"
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
 
@@ -71,4 +72,10 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
+	//only this path we will using lib csv new reader
+	records, err := csv.CSVFileToMap("DevMountain.csv")
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.ExportToJsonFile(records)
 }
