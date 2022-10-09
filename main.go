@@ -93,7 +93,7 @@ func main() {
 	}
 
 	//TODO: here
-	sqlitePath := outputFolder + "/clean.sqlite"
+	sqlitePath := outputFolder + "/DevMountain.sqlite"
 	sqlite.WriteSql(outputFolder+"/clean.csv", sqlitePath)
 	// Step 4 สร้าง SQLite view ที่สามารถ query ตามประเทศที่ทำงาน
 	sqlite.ViewRegionSql(sqlitePath)
