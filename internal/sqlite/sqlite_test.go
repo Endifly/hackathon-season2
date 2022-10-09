@@ -35,3 +35,16 @@ func TestSqlField(t *testing.T) {
 	fmt.Println(field1.Schema())
 
 }
+
+func TestSqliteManager(t *testing.T) {
+	// sql := SqlManager{}
+	// sql.OpenDB("./target.sqlite")
+
+	// err := sql.DB.Query("")
+
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	sql := OpenDB("./target.sqlite")
+	sql.Query("SELECT NATIONALITY FROM 'devMountain2' group by NATIONALITY")
+}

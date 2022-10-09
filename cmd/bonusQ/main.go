@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/markkj/hackathon-season2/internal/sqlite"
 	"github.com/markkj/hackathon-season2/internal/visualization"
 )
 
@@ -32,11 +33,19 @@ var statusMap = map[int]string{
 	3: "Retired",
 }
 
+func NewSqManager() sqlite.SqlManager {
+	sql := sqlite.SqlManager{}
+	sql.OpenDB("./devMountain2.sqlite")
+
+	return sql
+}
+
 // TODO: feed the correct data and display this one
 // SELECT COUNT(*),STRFTIME('%Y', hired) AS year
 // FROM DevMountainAnwser
 // GROUP by year
 func addVisualizationForHiredCountByYear(w http.ResponseWriter) {
+
 	chart := visualization.Chart{
 		Title:    "Employee hired by year",
 		Subtitle: "showing new hired employee count per year",
@@ -153,6 +162,15 @@ func addVisualizationEmployeeStatusByDept(w http.ResponseWriter) {
 
 // TODO: remove this one
 func addVis1(w http.ResponseWriter) {
+	// sql := NewSqManager()
+
+	// data := sql.DB.Query("")
+
+	// fmt.Pr
+	// sql := sqlite.OpenDB("./devMountain2.sqlite")
+
+	// sql.QueryVis1()
+
 	chart := visualization.Chart{
 		Title:    "Waiting",
 		Subtitle: "Stil waiting",
@@ -198,6 +216,8 @@ func addVis3(w http.ResponseWriter) {
 
 // TODO: remove this one
 func addVis4(w http.ResponseWriter) {
+	sql := sqlite.OpenDB("./devMountain2.sqlite")
+
 	chart := visualization.Chart{
 		Title:    "Waiting",
 		Subtitle: "Stil waiting",
@@ -212,6 +232,7 @@ func addVis4(w http.ResponseWriter) {
 
 // TODO: remove this one
 func addVis5(w http.ResponseWriter) {
+
 	chart := visualization.Chart{
 		Title:    "Waiting",
 		Subtitle: "Stil waiting",

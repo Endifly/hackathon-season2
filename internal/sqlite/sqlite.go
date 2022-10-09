@@ -13,6 +13,7 @@ import (
 /*
 SqlField type builder
 */
+
 type SqlField struct {
 	schema  []string
 	colName string
@@ -96,12 +97,6 @@ func (c *SqlData) UseSchema(columns []*SqlField) error {
 
 func (c *SqlData) AddRow(data []string) error {
 	cols := strings.Join(c.tableCols, ",")
-	// vals := strings.Join(data, ",")
-	// vals := []interface{}{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-	// valsTemplate := ""
-	// for i := 0; i < len(data); i++ {
-	// 	valsTemplate
-	// }
 
 	vals := []interface{}{}
 	for _, v := range data {
@@ -110,17 +105,117 @@ func (c *SqlData) AddRow(data []string) error {
 
 	cmd := fmt.Sprintf("insert into %s(%s) values(?,?,?,?,?,?,?,?,?,?,?,?)", c.tableName, cols)
 
-	fmt.Println(cmd)
-	// stmt, err := c.Conn.Prepare("insert into books(title, author) values(?, ?)")
 	stmt, err := c.Conn.Prepare(cmd)
 	if err != nil {
-		// return err
 		fmt.Println(err)
 	}
 
 	_, err = stmt.Exec(vals...)
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	return nil
+}
+
+// type
+
+func (c *SqlData) Query(cmd string) error {
+	// data := c.Conn.QueryRow("select *  from 'devMountain2' A where A.HIRED >= '2010-04-01'")
+	nationsT := make([]string, 0)
+	nations, _ := c.Conn.Query(cmd)
+
+	// v.Scan(&nation)
+
+	// fmt.Println("nation", len(nation))
+	for nations.Next() {
+		var nation string
+		if err := nations.Scan(&nation); err != nil {
+		}
+		nationsT = append(nationsT, nation)
+	}
+
+	fmt.Println(nationsT)
+
+	return nil
+}
+
+func (c *SqlData) QueryVis5() map[string]interface{} {
+	query := "select count(EMPID) as num,NATIONALITY from 'devMountain2' A group by A.NATIONALITY"
+
+	result := map[string]interface{}{}
+	conutrysCountQuery, err := c.Conn.Query(query)
+
+	
+
+	for conutrysCountQuery.Next() {
+		var countNum int64
+		var country string
+		if err := conutrysCountQuery.Scan(&countNum,&country)
+		fmt.Println(countNum)
+	}
+
+	return result
+
+}
+
+type SqlManager struct {
+	DB *SqlData
+}
+
+func (s *SqlManager) OpenDB(filePath string) error {
+	_, err := os.Stat(filePath)
+
+	if err != nil {
+		file, createErr := os.Create(filePath)
+
+		if createErr != nil {
+			return err
+		}
+
+		file.Close()
+	}
+
+	database, err := sql.Open("sqlite3", filePath)
+
+	if err != nil {
+		return err
+	}
+
+	s.DB = &SqlData{Conn: database}
+	return nil
+}
+
+func (s *SqlManager) CsvToSql(soucePath string) error {
+	s.DB.UseTable("devMountain2")
+
+	err := s.DB.UseSchema([]*SqlField{
+		Field("EMPID").Int().PrimaryKey(),
+		Field("PASSPORT").Text(),
+		Field("FIRSTNAME").Text(),
+		Field("LASTNAME").Text(),
+		Field("GENDER").Int(),
+		Field("BIRTHDAY").Date(),
+		Field("NATIONALITY").Text(),
+		Field("HIRED").Date(),
+		Field("DEPT").Text(),
+		Field("POSITION").Text(),
+		Field("STATUS").Int(),
+		Field("REGION").Text(),
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	employees, err := csv.CSVFileToList(soucePath)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, employee := range employees {
+		s.DB.AddRow(employee)
 	}
 
 	return nil
