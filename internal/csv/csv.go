@@ -1,8 +1,9 @@
 package csv
 
 import (
-	"encoding/csv"
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
@@ -78,7 +79,7 @@ func (c *CsvData) AddRecord(data []string) {
 	c.Records = append(c.Records, sb.String())
 }
 
-// CSVFileToMap  reads csv file into slice of map
+// CSVFileToMap reads csv file into slice of map
 func CSVFileToMap(filePath string) (returnMap []map[string]interface{}, err error) {
 
 	// read csv file
@@ -89,30 +90,35 @@ func CSVFileToMap(filePath string) (returnMap []map[string]interface{}, err erro
 
 	defer csvfile.Close()
 
-	reader := csv.NewReader(csvfile)
-
-	rawCSVdata, err := reader.ReadAll()
+	reader := bufio.NewReader(csvfile)
 	if err != nil {
-		return nil, fmt.Errorf(err.Error())
+		return nil, err
 	}
-
 	header := []string{} // holds first row (header)
-	for lineNum, record := range rawCSVdata {
-
-		// for first row, build the header slice
-		if lineNum == 0 {
-			str := strings.Split(record[0], ";")
+	isFirstRow := true
+	for {
+		row, _, err := reader.ReadLine()
+		if err != nil {
+			// if EOF error we just jump out of loop
+			if err == io.EOF {
+				break
+			}
+			return nil, err
+		}
+		rowStr := string(row)
+		if isFirstRow {
+			str := strings.Split(rowStr, ";")
 			header = append(header, str...)
+			isFirstRow = false
 		} else {
 			// for each cell, map[string]string k=header v=value
 			line := make(map[string]interface{})
-			str := strings.Split(record[0], ";")
+			str := strings.Split(rowStr, ";")
 			for i := 0; i < len(str); i++ {
 				line[header[i]] = str[i]
 			}
 			returnMap = append(returnMap, line)
 		}
 	}
-
 	return
 }

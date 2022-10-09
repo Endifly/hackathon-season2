@@ -6,13 +6,13 @@ import (
 )
 
 func ExportToJsonFile(records []map[string]interface{}, fileName string) error {
-	csvFile, err := os.Create(fileName + ".json")
+	jsonFile, err := os.Create(fileName + ".json")
 	if err != nil {
 		return err
 	}
 	// adjust format of output
-	csvFile.WriteString("[\n")
-	defer csvFile.Close()
+	jsonFile.WriteString("[\n")
+	defer jsonFile.Close()
 	for i, row := range records {
 		jsonStr, err := json.MarshalIndent(row, "", " ")
 		if err != nil {
@@ -23,12 +23,12 @@ func ExportToJsonFile(records []map[string]interface{}, fileName string) error {
 		if i != len(records)-1 {
 			str = str + ","
 		}
-		_, err = csvFile.WriteString(str)
+		_, err = jsonFile.WriteString(str)
 		if err != nil {
 			return err
 		}
 	}
 	// adjust format of output
-	csvFile.WriteString("\n]")
+	jsonFile.WriteString("\n]")
 	return nil
 }

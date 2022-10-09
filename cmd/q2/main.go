@@ -54,7 +54,6 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	//only this path we will using lib csv new reader
 	records, err := csv.CSVFileToMap("DevMountain.csv")
 	if err != nil {
 		fmt.Println(err)
