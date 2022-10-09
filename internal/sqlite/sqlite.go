@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/markkj/hackathon-season2/internal/csv"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -42,7 +43,10 @@ func (f *SqlField) Int() *SqlField {
 }
 
 func (f *SqlField) Schema() string {
-	return strings.Join(f.schema, " ")
+	schem := strings.Join(f.schema, " ")
+	col := fmt.Sprintf("%s ", f.colName)
+	// return strings.Join(f.schema, " ")
+	return col + schem
 }
 
 // SqlField builder ...
@@ -62,11 +66,15 @@ func (c *SqlData) UseTable(tableName string) {
 }
 
 func (c *SqlData) UseSchema(columns []*SqlField) error {
-	// schema := ""
-	// schema =
+	cols := ""
+	for _, v := range columns {
+		cols = cols + v.Schema() + ","
+	}
 
-	// cmd := fmt.Sprintf("create table if not exists ? (id integer primary key autoincrement, title text, author text)")
-	stmt, err := c.Conn.Prepare("create table if not exists books (id integer primary key autoincrement, title text, author text)")
+	cols = strings.TrimSuffix(cols, ",")
+
+	cmd := fmt.Sprintf("create table if not exists %s (%s)", c.tableName, cols)
+	stmt, err := c.Conn.Prepare(cmd)
 	if err != nil {
 		return err
 	}
@@ -145,6 +153,10 @@ func WriteSql(filePath string) error {
 		Field("STATUS").Int(),
 		Field("REGION").Text(),
 	})
+
+	v, err := csv.CSVFileToMap(filePath)
+
+	fmt.Println(v)
 
 	if err != nil {
 		fmt.Println(err)
