@@ -24,9 +24,7 @@ func (c *CsvData) BuildCsvFile(outPath string) error {
 	if err != nil {
 		return err
 	}
-	// fmt.Printf("wrote %v bytes\n", c)
 	err = prepareRow(c.Records, csvFile)
-	// fmt.Println(c.Records)
 	if err != nil {
 		return err
 	}
