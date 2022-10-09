@@ -10,7 +10,7 @@ import (
 )
 
 /*
-	SqlField type builder
+SqlField type builder
 */
 type SqlField struct {
 	schema  []string
@@ -96,7 +96,7 @@ func (c *SqlData) AddRow(data []string) error {
 }
 
 /*
-	alway return db connection
+alway return db connection
 */
 func OpenDB(filePath string) SqlData {
 	_, err := os.Stat(filePath)
