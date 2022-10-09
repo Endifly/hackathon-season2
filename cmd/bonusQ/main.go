@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"net/http"
 
-	// "github.com/go-echarts/go-echarts/v2/charts"
-	// "github.com/go-echarts/go-echarts/v2/opts"
-	// "github.com/go-echarts/go-echarts/v2/types"
 	"github.com/markkj/hackathon-season2/internal/visualization"
 )
 
@@ -39,9 +36,37 @@ func addVis2(w http.ResponseWriter) {
 	chart.CreatePieChart(w)
 }
 
+func addVis3(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateScatter(w)
+}
+
+func addVis4(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		Items: map[string]interface{}{
+			"Thailand": 63,
+			"Russia":   200,
+			"Canada":   45,
+		},
+	}
+	chart.CreateWorldMap(w)
+}
+
 func httpserver(w http.ResponseWriter, _ *http.Request) {
 	addVis1(w)
 	addVis2(w)
+	addVis3(w)
+	addVis4(w)
 }
 
 func main() {
