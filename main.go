@@ -8,6 +8,7 @@ import (
 
 	"github.com/markkj/hackathon-season2/internal/csv"
 	"github.com/markkj/hackathon-season2/internal/json"
+	"github.com/markkj/hackathon-season2/internal/models"
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
 
@@ -40,13 +41,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	employees, err := MapToEmployees(data)
+	employees, err := models.MapToEmployees(data)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	// ** Start clean anomalies information challenge
-	employees = employees.FilterBy(isValidStatus, isValidGender, isActiveStatus)
+	employees = employees.FilterBy(models.IsValidStatus, models.IsValidGender, models.IsActiveStatus)
 	fmt.Printf("clean result row = %d\n", len(employees))
 	err = exportToCSV(fmt.Sprintf("%s/clean", outputFolder), employees)
 	if err != nil {
@@ -58,7 +59,7 @@ func main() {
 	// Step 1 ย้ายพนักงานจากสายการบิน DevMountain ไป DevClub เฉพาะตำแหน่ง Air Hostess, Pilot และ Steward ที่มีสถานะ Active
 	// Note "Active is already filter from clean data above"
 	// check role
-	employees = employees.FilterBy(isOnlyPosition)
+	employees = employees.FilterBy(models.IsOnlyPosition)
 	fmt.Printf("check only positon steward,airhostess,pilot result row = %d\n", len(employees))
 	err = exportToCSV(outputFolder+"/only_steward_airhostess_pilot_and_active", employees)
 	if err != nil {
@@ -68,7 +69,7 @@ func main() {
 
 	// Step 2 สำหรับตำแหน่งอายุการทำงาน เกิน 3 ปี
 	// check exp more than three compare with current date
-	employees = employees.FilterBy(isExpMoreThanThree)
+	employees = employees.FilterBy(models.IsExpMoreThanThree)
 	fmt.Printf("check only exp more than three result row = %d\n", len(employees))
 	err = exportToCSV(outputFolder+"/only_exp_more_than_three", employees)
 	if err != nil {
@@ -96,7 +97,7 @@ func main() {
 	// ** End migration Challenge
 }
 
-func exportToCSV(fileName string, employees Employees) error {
+func exportToCSV(fileName string, employees models.Employees) error {
 	csvFile := &csv.CsvData{
 		Columns: columnStrings,
 		Records: []string{},

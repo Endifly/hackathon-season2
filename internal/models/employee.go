@@ -1,4 +1,4 @@
-package main
+package models
 
 import (
 	"fmt"
@@ -123,7 +123,7 @@ func (emps Employees) GroupByNation() map[string]Employees {
 	return groupByNation
 }
 
-func isOnlyPosition(emp *Employee) bool {
+func IsOnlyPosition(emp *Employee) bool {
 	positions := []string{"Airhostess", "Pilot", "Steward"}
 	for _, position := range positions {
 		if position == emp.POSITION {
@@ -133,28 +133,28 @@ func isOnlyPosition(emp *Employee) bool {
 	return false
 }
 
-func isActiveStatus(emp *Employee) bool {
+func IsActiveStatus(emp *Employee) bool {
 	if emp.STATUS != 1 {
 		return false
 	}
 	return true
 }
 
-func isValidStatus(emp *Employee) bool {
+func IsValidStatus(emp *Employee) bool {
 	if emp.STATUS != 1 && emp.STATUS != 2 && emp.STATUS != 3 {
 		return false
 	}
 	return true
 }
 
-func isValidGender(emp *Employee) bool {
+func IsValidGender(emp *Employee) bool {
 	if emp.GENDER != 0 && emp.GENDER != 1 {
 		return false
 	}
 	return true
 }
 
-func isExpMoreThanThree(emp *Employee) bool {
+func IsExpMoreThanThree(emp *Employee) bool {
 	date := emp.HIRED
 	date = time.Time{}.Add(time.Now().Sub(date))
 	if date.Year() < 3 {
