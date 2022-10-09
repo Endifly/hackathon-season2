@@ -11,7 +11,7 @@ import (
 )
 
 /*
-	SqlField type builder
+SqlField type builder
 */
 type SqlField struct {
 	schema  []string
@@ -42,6 +42,11 @@ func (f *SqlField) Int() *SqlField {
 	return f
 }
 
+func (f *SqlField) Date() *SqlField {
+	f.addSchema("date")
+	return f
+}
+
 func (f *SqlField) Schema() string {
 	schem := strings.Join(f.schema, " ")
 	col := fmt.Sprintf("%s ", f.colName)
@@ -59,6 +64,7 @@ func Field(name string) *SqlField {
 type SqlData struct {
 	Conn      *sql.DB
 	tableName string
+	tableCols []string
 }
 
 func (c *SqlData) UseTable(tableName string) {
@@ -68,6 +74,7 @@ func (c *SqlData) UseTable(tableName string) {
 func (c *SqlData) UseSchema(columns []*SqlField) error {
 	cols := ""
 	for _, v := range columns {
+		c.tableCols = append(c.tableCols, v.colName)
 		cols = cols + v.Schema() + ","
 	}
 
@@ -88,23 +95,39 @@ func (c *SqlData) UseSchema(columns []*SqlField) error {
 }
 
 func (c *SqlData) AddRow(data []string) error {
+	cols := strings.Join(c.tableCols, ",")
+	// vals := strings.Join(data, ",")
+	// vals := []interface{}{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+	// valsTemplate := ""
+	// for i := 0; i < len(data); i++ {
+	// 	valsTemplate
+	// }
 
-	stmt, err := c.Conn.Prepare("insert into books(title, author) values(?, ?)")
-	if err != nil {
-		// log.Fatalf("insert prepare failed: %s", err)
-		return err
+	vals := []interface{}{}
+	for _, v := range data {
+		vals = append(vals, v)
 	}
 
-	_, err = stmt.Exec(data)
+	cmd := fmt.Sprintf("insert into %s(%s) values(?,?,?,?,?,?,?,?,?,?,?,?)", c.tableName, cols)
+
+	fmt.Println(cmd)
+	// stmt, err := c.Conn.Prepare("insert into books(title, author) values(?, ?)")
+	stmt, err := c.Conn.Prepare(cmd)
 	if err != nil {
-		return err
+		// return err
+		fmt.Println(err)
+	}
+
+	_, err = stmt.Exec(vals...)
+	if err != nil {
+		fmt.Println(err)
 	}
 
 	return nil
 }
 
 /*
-	alway return db connection
+alway return db connection
 */
 func OpenDB(filePath string) SqlData {
 	_, err := os.Stat(filePath)
@@ -145,21 +168,27 @@ func WriteSql(filePath string) error {
 		Field("FIRSTNAME").Text(),
 		Field("LASTNAME").Text(),
 		Field("GENDER").Int(),
-		Field("BIRTHDAY").Text(),
+		Field("BIRTHDAY").Date(),
 		Field("NATIONALITY").Text(),
-		Field("HIRED").Text(),
+		Field("HIRED").Date(),
 		Field("DEPT").Text(),
 		Field("POSITION").Text(),
 		Field("STATUS").Int(),
 		Field("REGION").Text(),
 	})
 
-	v, err := csv.CSVFileToMap(filePath)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	fmt.Println(v)
+	employees, err := csv.CSVFileToList("../../output/clean.csv")
 
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	for _, employee := range employees {
+		db.AddRow(employee)
 	}
 
 	return nil

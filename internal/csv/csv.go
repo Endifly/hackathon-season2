@@ -121,3 +121,39 @@ func CSVFileToMap(filePath string) (returnMap []map[string]interface{}, err erro
 	}
 	return
 }
+
+func CSVFileToList(filePath string) (returnMap [][]string, err error) {
+
+	// read csv file
+	csvfile, err := os.Open(filePath)
+	if err != nil {
+		return nil, fmt.Errorf(err.Error())
+	}
+
+	defer csvfile.Close()
+
+	reader := bufio.NewReader(csvfile)
+	if err != nil {
+		return nil, err
+	}
+
+	isFirstRow := true
+	for {
+		row, _, err := reader.ReadLine()
+		if err != nil {
+			// if EOF error we just jump out of loop
+			if err == io.EOF {
+				break
+			}
+			return nil, err
+		}
+		rowStr := string(row)
+		if isFirstRow {
+			isFirstRow = false
+		} else {
+			str := strings.Split(rowStr, ";")
+			returnMap = append(returnMap, str)
+		}
+	}
+	return
+}

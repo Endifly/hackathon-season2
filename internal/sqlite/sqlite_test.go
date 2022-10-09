@@ -9,7 +9,8 @@ func TestToSqlite(t *testing.T) {
 	err := ToSqlite("../../", "./target.csv")
 
 	if err != nil {
-		t.Errorf("error")
+		// t.Errorf("error")
+		fmt.Println(err)
 	}
 }
 

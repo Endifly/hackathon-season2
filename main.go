@@ -33,6 +33,9 @@ var (
 )
 
 func main() {
+	outputFolder := "output"
+
+	os.Mkdir(outputFolder, os.ModePerm)
 	data, err := xml.ReadXMLFromHackathon("./data-devclub-1.xml")
 	if err != nil {
 		log.Fatal(err)
@@ -42,41 +45,55 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// ** Start clean anomalies information challenge
 	employees = employees.FilterBy(isValidStatus, isValidGender, isActiveStatus)
 	fmt.Printf("clean result row = %d\n", len(employees))
-	err = exportToCSV("clean", employees)
+	err = exportToCSV(fmt.Sprintf("%s/clean", outputFolder), employees)
 	if err != nil {
 		log.Fatal(err)
 	}
+	// ** End clean anomalies information challenge
 
+	// ** Start migration Challenge
+	// Step 1 ย้ายพนักงานจากสายการบิน DevMountain ไป DevClub เฉพาะตำแหน่ง Air Hostess, Pilot และ Steward ที่มีสถานะ Active
+	// Note "Active is already filter from clean data above"
 	// check role
 	employees = employees.FilterBy(isOnlyPosition)
 	fmt.Printf("check only positon steward,airhostess,pilot result row = %d\n", len(employees))
-	err = exportToCSV("only_steward_airhostess_pilot_and_active", employees)
+	err = exportToCSV(outputFolder+"/only_steward_airhostess_pilot_and_active", employees)
 	if err != nil {
 		log.Fatal(err)
 	}
+	//TODO: store CSV data to SQLite from step 1 here
 
+	// Step 2 สำหรับตำแหน่งอายุการทำงาน เกิน 3 ปี
 	// check exp more than three compare with current date
 	employees = employees.FilterBy(isExpMoreThanThree)
 	fmt.Printf("check only exp more than three result row = %d\n", len(employees))
-	err = exportToCSV("only_exp_more_than_three", employees)
+	err = exportToCSV(outputFolder+"/only_exp_more_than_three", employees)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = exportToCSV("DevMountain", employees)
+	err = exportToCSV(outputFolder+"/DevMountain", employees)
 	if err != nil {
 		log.Fatal(err)
 	}
+	//TODO: store CSV data to SQLite from step 2 here
 
+	// Step 3 สร้างไฟล์ CSV แยกตามสัญชาติของพนักงาน
 	groupByNation := employees.GroupByNation()
 	for key, group := range groupByNation {
-		err = exportToCSV(fmt.Sprintf("DevMountain-%s", key), group)
+		err = exportToCSV(fmt.Sprintf(outputFolder+"/DevMountain-%s", key), group)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
+	//TODO: here
+	// Step 4 สร้าง SQLite view ที่สามารถ query ตามประเทศที่ทำงาน
+	// Step 5 สร้าง SQLite view สำหรับแบ่งตาม department
+	// Step 6 สร้าง SQLite view ที่สามารถ query ตามสัญชาติของพนักงาน
+	// ** End migration Challenge
 }
 
 func exportToCSV(fileName string, employees Employees) error {
