@@ -9,6 +9,7 @@ import (
 	"github.com/markkj/hackathon-season2/internal/csv"
 	"github.com/markkj/hackathon-season2/internal/json"
 	"github.com/markkj/hackathon-season2/internal/models"
+	"github.com/markkj/hackathon-season2/internal/sqlite"
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
 
@@ -91,9 +92,13 @@ func main() {
 		}
 	}
 	//TODO: here
+	sqlitePath := "./internal/sqlite/datadevclub-1.xml"
 	// Step 4 สร้าง SQLite view ที่สามารถ query ตามประเทศที่ทำงาน
+	sqlite.ViewRegionSql(sqlitePath)
 	// Step 5 สร้าง SQLite view สำหรับแบ่งตาม department
+	sqlite.ViewDepartmentSql(sqlitePath)
 	// Step 6 สร้าง SQLite view ที่สามารถ query ตามสัญชาติของพนักงาน
+	sqlite.ViewNationSql(sqlitePath)
 	// ** End migration Challenge
 }
 
