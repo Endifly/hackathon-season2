@@ -91,8 +91,10 @@ func main() {
 			log.Fatal(err)
 		}
 	}
+
 	//TODO: here
-	sqlitePath := "./internal/sqlite/datadevclub-1.xml"
+	sqlitePath := outputFolder + "/clean.sqlite"
+	sqlite.WriteSql(outputFolder+"/clean.csv", sqlitePath)
 	// Step 4 สร้าง SQLite view ที่สามารถ query ตามประเทศที่ทำงาน
 	sqlite.ViewRegionSql(sqlitePath)
 	// Step 5 สร้าง SQLite view สำหรับแบ่งตาม department

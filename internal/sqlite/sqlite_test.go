@@ -23,7 +23,7 @@ func TestToSqliteInvalidPath(t *testing.T) {
 }
 
 func TestWriteSql(t *testing.T) {
-	err := WriteSql("./target.sqlite")
+	err := WriteSql("../../output/clean.csv", "./target.sqlite")
 
 	if err != nil {
 		// t.Errorf("error")

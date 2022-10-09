@@ -166,68 +166,6 @@ func (c *SqlData) QueryVis5() map[string]interface{} {
 
 }
 
-type SqlManager struct {
-	DB *SqlData
-}
-
-func (s *SqlManager) OpenDB(filePath string) error {
-	_, err := os.Stat(filePath)
-
-	if err != nil {
-		file, createErr := os.Create(filePath)
-
-		if createErr != nil {
-			return err
-		}
-
-		file.Close()
-	}
-
-	database, err := sql.Open("sqlite3", filePath)
-
-	if err != nil {
-		return err
-	}
-
-	s.DB = &SqlData{Conn: database}
-	return nil
-}
-
-func (s *SqlManager) CsvToSql(soucePath string) error {
-	s.DB.UseTable("devMountain2")
-
-	err := s.DB.UseSchema([]*SqlField{
-		Field("EMPID").Int().PrimaryKey(),
-		Field("PASSPORT").Text(),
-		Field("FIRSTNAME").Text(),
-		Field("LASTNAME").Text(),
-		Field("GENDER").Int(),
-		Field("BIRTHDAY").Date(),
-		Field("NATIONALITY").Text(),
-		Field("HIRED").Date(),
-		Field("DEPT").Text(),
-		Field("POSITION").Text(),
-		Field("STATUS").Int(),
-		Field("REGION").Text(),
-	})
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	employees, err := csv.CSVFileToList(soucePath)
-
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	for _, employee := range employees {
-		s.DB.AddRow(employee)
-	}
-
-	return nil
-}
-
 /*
 alway return db connection
 */
@@ -254,7 +192,7 @@ func OpenDB(filePath string) SqlData {
 
 }
 
-func WriteSql(filePath string) error {
+func WriteSql(sourcePath string, filePath string) error {
 	db := OpenDB(filePath)
 	defer db.Conn.Close()
 
@@ -283,7 +221,8 @@ func WriteSql(filePath string) error {
 		fmt.Println(err)
 	}
 
-	employees, err := csv.CSVFileToList("../../output/clean.csv")
+	employees, err := csv.CSVFileToList(sourcePath)
+	// employees, err := csv.CSVFileToList("../../output/clean.csv")
 
 	if err != nil {
 		fmt.Println(err)
@@ -294,6 +233,8 @@ func WriteSql(filePath string) error {
 	}
 
 	ViewNationSql(filePath)
+	ViewDepartmentSql(filePath)
+	ViewRegionSql(filePath)
 
 	return nil
 }
@@ -333,13 +274,12 @@ func ViewNationSql(filePath string) error {
 		var nation string
 		if err := nations.Scan(&nation); err != nil {
 		}
-		fmt.Println("nation", nation)
+
 		nationArr = append(nationArr, nation)
 	}
 
 	for i := range nationArr {
 		cmd := fmt.Sprintf("CREATE VIEW nation%s as SELECT * FROM 'devMountain2' WHERE NATIONALITY = '%s'", nationArr[i], nationArr[i])
-		fmt.Println(cmd)
 		_, err := db.Conn.Exec(cmd)
 		if err != nil {
 			return err
@@ -364,11 +304,13 @@ func ViewDepartmentSql(filePath string) error {
 		var dept string
 		if err := depts.Scan(&dept); err != nil {
 		}
+
 		deptArr = append(deptArr, dept)
 	}
 
 	for i := range deptArr {
-		_, err := db.Conn.Exec("CREATE VIEW department%s as SELECT * FROM 'devMountain2' WHERE DEPT = '%s'", deptArr[i])
+		query := fmt.Sprintf("CREATE VIEW department%s as SELECT * FROM 'devMountain2' WHERE DEPT = '%s'", strings.ReplaceAll(deptArr[i], " ", ""), deptArr[i])
+		_, err := db.Conn.Exec(query)
 		if err != nil {
 			return err
 		}
@@ -396,7 +338,8 @@ func ViewRegionSql(filePath string) error {
 	}
 
 	for i := range regionArr {
-		_, err := db.Conn.Exec("CREATE VIEW region%s as SELECT * FROM 'devMountain2' WHERE REGION = '%s'", regionArr[i])
+		query := fmt.Sprintf("CREATE VIEW region%s as SELECT * FROM 'devMountain2' WHERE REGION = '%s'", regionArr[i], regionArr[i])
+		_, err := db.Conn.Exec(query)
 		if err != nil {
 			return err
 		}
