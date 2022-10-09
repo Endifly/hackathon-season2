@@ -24,6 +24,7 @@ func (c *CsvData) BuildCsvFile(outPath string) error {
 	if err != nil {
 		return err
 	}
+
 	err = prepareRow(c.Records, csvFile)
 	if err != nil {
 		return err
