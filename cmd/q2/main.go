@@ -10,9 +10,7 @@ import (
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
 
-const (
-	moveStatus = "1"
-)
+// ** Migration Challenge
 
 func main() {
 	data, err := xml.ReadXMLFromHackathon("./data-devclub-1.xml")

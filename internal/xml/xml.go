@@ -30,7 +30,7 @@ func ReadXMLFromHackathon(filePath string) ([]map[string]string, error) {
 	return reader.getAttribute()
 }
 
-// getAttribute is ...
+// getAttribute is helper function to get string postion from records of xml file
 func (r *ReaderXMLHackathon) getAttribute() ([]map[string]string, error) {
 	data := make([]map[string]string, 0)
 	for i := startIndexFrom; i < len(r.recordStrings); i += jumpLenght {
