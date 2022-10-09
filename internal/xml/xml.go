@@ -9,7 +9,7 @@ import (
 const (
 	startIndexFrom = 3
 	jumpLenght     = 14
-	recordLenght   = 11
+	recordLenght   = 12
 )
 
 // ReaderXMLHackathon is an object responisble for reader xml and validate data to other file
