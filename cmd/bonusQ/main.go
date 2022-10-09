@@ -7,6 +7,30 @@ import (
 	"github.com/markkj/hackathon-season2/internal/visualization"
 )
 
+func addVisualizationForHiredPerYear(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+func addVisualizationForBirithdayByYear(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
 func addVis1(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
@@ -62,11 +86,25 @@ func addVis4(w http.ResponseWriter) {
 	chart.CreateWorldMap(w)
 }
 
+func addVis5(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreatebarChart(w)
+}
+
 func httpserver(w http.ResponseWriter, _ *http.Request) {
 	addVis1(w)
 	addVis2(w)
 	addVis3(w)
 	addVis4(w)
+	addVis5(w)
 }
 
 func main() {
