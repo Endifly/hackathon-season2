@@ -46,5 +46,6 @@ func TestSqliteManager(t *testing.T) {
 	// 	fmt.Println(err)
 	// }
 	sql := OpenDB("./target.sqlite")
-	sql.Query("SELECT NATIONALITY FROM 'devMountain2' group by NATIONALITY")
+	// sql.Query("SELECT NATIONALITY FROM 'devMountain2' group by NATIONALITY")
+	sql.QueryVis5()
 }

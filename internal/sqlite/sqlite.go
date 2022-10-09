@@ -144,15 +144,22 @@ func (c *SqlData) QueryVis5() map[string]interface{} {
 	query := "select count(EMPID) as num,NATIONALITY from 'devMountain2' A group by A.NATIONALITY"
 
 	result := map[string]interface{}{}
-	conutrysCountQuery, err := c.Conn.Query(query)
 
-	
+	// fmt.Println(query)
+	conutrysCountQuery, _ := c.Conn.Query(query)
+
+	fmt.Println(conutrysCountQuery)
 
 	for conutrysCountQuery.Next() {
 		var countNum int64
 		var country string
-		if err := conutrysCountQuery.Scan(&countNum,&country)
-		fmt.Println(countNum)
+		if err := conutrysCountQuery.Scan(&countNum, &country); err != nil {
+
+		} else {
+			fmt.Println(countNum, country)
+			result[country] = countNum
+		}
+
 	}
 
 	return result

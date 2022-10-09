@@ -218,6 +218,12 @@ func addVis3(w http.ResponseWriter) {
 func addVis4(w http.ResponseWriter) {
 	sql := sqlite.OpenDB("./devMountain2.sqlite")
 
+	fmt.Println(sql)
+
+	data := sql.QueryVis5()
+
+	fmt.Println(data)
+
 	chart := visualization.Chart{
 		Title:    "Waiting",
 		Subtitle: "Stil waiting",
@@ -226,6 +232,7 @@ func addVis4(w http.ResponseWriter) {
 			"Russia":   200,
 			"Canada":   45,
 		},
+		// Items: data,
 	}
 	chart.CreateWorldMap(w)
 }
