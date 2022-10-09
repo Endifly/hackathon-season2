@@ -28,7 +28,7 @@ Hackathon Challenge Season2
 
 **[Repo](https://github.com/LAzyDev-101/todo)**
 
-### How to run Bouns question(Data Visualization)
+### How to run Bonus question(Data Visualization)
 ```shell
 go run cmd/bonusQ/main.go
 ```

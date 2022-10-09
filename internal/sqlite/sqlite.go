@@ -308,3 +308,87 @@ func ToSqlite(filePath string, fileTarget string) error {
 
 	return nil
 }
+
+func ViewNationSql(filePath string) error {
+	db := OpenDB(filePath)
+	defer db.Conn.Close()
+
+	if db.Conn == nil {
+		fmt.Println("erro")
+	}
+
+	nationArr := make([]string, 0)
+	nations, _ := db.Conn.Query("SELECT NATIONALITY FROM 'devMountain2' group by NATIONALITY")
+
+	for nations.Next() {
+		var nation string
+		if err := nations.Scan(&nation); err != nil {
+		}
+		nationArr = append(nationArr, nation)
+	}
+
+	for i := range nationArr {
+		_, err := db.Conn.Exec("CREATE VIEW nation%s as SELECT * FROM 'devMountain2' WHERE NATIONALITY = '%s'", nationArr[i])
+		if err != nil {
+			return err
+		}
+		db.Conn.Exec("SELECT * FROM nation%s", nationArr[i])
+	}
+	return nil
+}
+
+func ViewDepartmentSql(filePath string) error {
+	db := OpenDB(filePath)
+	defer db.Conn.Close()
+
+	if db.Conn == nil {
+		fmt.Println("erro")
+	}
+
+	deptArr := make([]string, 0)
+	depts, _ := db.Conn.Query("SELECT DEPT FROM 'devMountain2' group by DEPT")
+
+	for depts.Next() {
+		var dept string
+		if err := depts.Scan(&dept); err != nil {
+		}
+		deptArr = append(deptArr, dept)
+	}
+
+	for i := range deptArr {
+		_, err := db.Conn.Exec("CREATE VIEW department%s as SELECT * FROM 'devMountain2' WHERE DEPT = '%s'", deptArr[i])
+		if err != nil {
+			return err
+		}
+		db.Conn.Exec("SELECT * FROM department%s", deptArr[i])
+	}
+	return nil
+}
+
+func ViewRegionSql(filePath string) error {
+	db := OpenDB(filePath)
+	defer db.Conn.Close()
+
+	if db.Conn == nil {
+		fmt.Println("erro")
+	}
+
+	regionArr := make([]string, 0)
+	regions, _ := db.Conn.Query("SELECT REGION FROM 'devMountain2' group by REGION")
+
+	for regions.Next() {
+		var region string
+		if err := regions.Scan(&region); err != nil {
+		}
+		regionArr = append(regionArr, region)
+	}
+
+	for i := range regionArr {
+		_, err := db.Conn.Exec("CREATE VIEW region%s as SELECT * FROM 'devMountain2' WHERE REGION = '%s'", regionArr[i])
+		if err != nil {
+			return err
+		}
+		db.Conn.Exec("SELECT * FROM region%s", regionArr[i])
+	}
+	return nil
+}
