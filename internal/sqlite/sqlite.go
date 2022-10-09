@@ -293,6 +293,8 @@ func WriteSql(filePath string) error {
 		db.AddRow(employee)
 	}
 
+	ViewNationSql(filePath)
+
 	return nil
 }
 
@@ -331,15 +333,18 @@ func ViewNationSql(filePath string) error {
 		var nation string
 		if err := nations.Scan(&nation); err != nil {
 		}
+		fmt.Println("nation", nation)
 		nationArr = append(nationArr, nation)
 	}
 
 	for i := range nationArr {
-		_, err := db.Conn.Exec("CREATE VIEW nation%s as SELECT * FROM 'devMountain2' WHERE NATIONALITY = '%s'", nationArr[i])
+		cmd := fmt.Sprintf("CREATE VIEW nation%s as SELECT * FROM 'devMountain2' WHERE NATIONALITY = '%s'", nationArr[i], nationArr[i])
+		fmt.Println(cmd)
+		_, err := db.Conn.Exec(cmd)
 		if err != nil {
 			return err
 		}
-		db.Conn.Exec("SELECT * FROM nation%s", nationArr[i])
+		// db.Conn.Exec("SELECT * FROM nation%s", nationArr[i])
 	}
 	return nil
 }
