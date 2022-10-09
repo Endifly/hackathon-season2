@@ -7,10 +7,10 @@ import (
 	"github.com/markkj/hackathon-season2/internal/visualization"
 )
 
-func addVisualizationForHiredPerYear(w http.ResponseWriter) {
+func addVisualizationForHiredCountByYear(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee hired by year",
+		Subtitle: "showing new hired employee count per year",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
@@ -22,8 +22,8 @@ func addVisualizationForHiredPerYear(w http.ResponseWriter) {
 
 func addVisualizationForBirithdayByMonth(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee birithday By month",
+		Subtitle: "showing employee birithday group by month",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
@@ -35,8 +35,8 @@ func addVisualizationForBirithdayByMonth(w http.ResponseWriter) {
 
 func addVisualizationEmployeeAge(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee Age",
+		Subtitle: "showing employee group by age",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
@@ -48,8 +48,8 @@ func addVisualizationEmployeeAge(w http.ResponseWriter) {
 
 func addVisualizationEmployeeGender(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee Gender",
+		Subtitle: "showing employee group by gender",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
@@ -59,10 +59,10 @@ func addVisualizationEmployeeGender(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-func addVisualizationEmployeeDepartMent(w http.ResponseWriter) {
+func addVisualizationEmployeeDepartment(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee Department",
+		Subtitle: "showing employee group by department",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
@@ -73,8 +73,8 @@ func addVisualizationEmployeeDepartMent(w http.ResponseWriter) {
 }
 func addVisualizationEmployeeRegion(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee Region",
+		Subtitle: "showing employee group by Region",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
@@ -86,21 +86,8 @@ func addVisualizationEmployeeRegion(w http.ResponseWriter) {
 
 func addVisualizationEmployeeStatusByDept(w http.ResponseWriter) {
 	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
-		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
-		Items: map[string]interface{}{
-			"key":  []int{1, 3, 5, 7, 3, 4, 5},
-			"key2": []int{2, 4, 2, 10, 2, 4, 5},
-		},
-	}
-	chart.CreateLineChart(w)
-}
-
-func addVisualizationHireCountByYear(w http.ResponseWriter) {
-	chart := visualization.Chart{
-		Title:    "Waiting",
-		Subtitle: "Stil waiting",
+		Title:    "Employee Status count by Department",
+		Subtitle: "showing employee status count group by department",
 		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
 		Items: map[string]interface{}{
 			"key":  []int{1, 3, 5, 7, 3, 4, 5},
