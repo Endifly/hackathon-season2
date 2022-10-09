@@ -2,60 +2,37 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"net/http"
 
-	"github.com/go-echarts/go-echarts/v2/charts"
-	"github.com/go-echarts/go-echarts/v2/opts"
-	"github.com/go-echarts/go-echarts/v2/types"
+	// "github.com/go-echarts/go-echarts/v2/charts"
+	// "github.com/go-echarts/go-echarts/v2/opts"
+	// "github.com/go-echarts/go-echarts/v2/types"
+	"github.com/markkj/hackathon-season2/internal/visualization"
 )
 
-// generate random data for line chart
-func generateLineItems() []opts.LineData {
-	items := make([]opts.LineData, 0)
-	for i := 0; i < 7; i++ {
-		items = append(items, opts.LineData{Value: rand.Intn(300)})
+func addVis1(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		XAxis: []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
 	}
-	return items
+	chart.CreateLineChart(w)
 }
 
+// func addVis2() {
+// 	chart := visualization.Chart{
+// 		XAxis: []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+// 	}
+// }
+
 func httpserver(w http.ResponseWriter, _ *http.Request) {
-	// create a new line instance
-	line := charts.NewLine()
-	// set some global options like Title/Legend/ToolTip or anything else
-	line.SetGlobalOptions(
-		charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
-		charts.WithTitleOpts(opts.Title{
-			Title:    "Line example in Westeros theme",
-			Subtitle: "Line chart rendered by the http server this time",
-		}))
-
-	// Put data into instance
-	line.SetXAxis([]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}).
-		AddSeries("Category A", generateLineItems()).
-		AddSeries("Category B", generateLineItems()).
-		SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
-	line.Render(w)
-	// create a new line instance
-	line = charts.NewLine()
-	// set some global options like Title/Legend/ToolTip or anything else
-	line.SetGlobalOptions(
-		charts.WithInitializationOpts(opts.Initialization{Theme: types.ThemeWesteros}),
-		charts.WithTitleOpts(opts.Title{
-			Title:    "Line example in Westeros theme",
-			Subtitle: "Line chart rendered by the http server this time",
-		}))
-
-	// Put data into instance
-	line.SetXAxis([]string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"}).
-		AddSeries("Category A", generateLineItems()).
-		AddSeries("Category B", generateLineItems()).
-		SetSeriesOptions(charts.WithLineChartOpts(opts.LineChart{Smooth: true}))
-	line.Render(w)
+	addVis1(w)
 }
 
 func main() {
 	http.HandleFunc("/", httpserver)
-	fmt.Println("Starting http server with port :8081")
+	fmt.Println("Starting http server at port :8081")
 	http.ListenAndServe(":8081", nil)
 }
