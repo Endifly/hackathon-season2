@@ -10,7 +10,7 @@ import (
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
 
-// ** Migration Challenge 
+// ** Migration Challenge
 const (
 	moveStatus = "1"
 )
