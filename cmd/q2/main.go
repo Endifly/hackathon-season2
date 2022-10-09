@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	"github.com/markkj/hackathon-season2/internal/csv"
+	"github.com/markkj/hackathon-season2/internal/json"
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
 
-const ()
+const (
+	moveStatus = "1"
+)
 
 func main() {
 	data, err := xml.ReadXMLFromHackathon("./data-devclub-1.xml")
@@ -37,7 +42,13 @@ func main() {
 		record := make([]string, len(columnStrings))
 		isValid := true
 		for key, value := range row {
-
+			if key == "HIRED" {
+				date, _ := time.Parse("02-01-2006", value)
+				date = time.Time{}.Add(time.Now().Sub(date))
+				if date.Year() < 3 {
+					isValid = false
+				}
+			}
 			for i, c := range columnStrings {
 				if key == c {
 					record[i] = value
@@ -49,13 +60,15 @@ func main() {
 			csvFile.AddRecord(record)
 		}
 	}
-	err = csvFile.BuildCsvFile("../../q2.csv")
+	path, _ := os.Getwd()
+	path += "/q1.csv"
+	err = csvFile.BuildCsvFile(path)
 	if err != nil {
 		fmt.Println(err)
 	}
-	// records, err := csv.CSVFileToMap("DevMountain.csv")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// json.ExportToJsonFile(records, "DevMountainAnwser")
+	records, err := csv.CSVFileToMap(path)
+	if err != nil {
+		fmt.Println(err)
+	}
+	json.ExportToJsonFile(records, "DevMountainAnwserQ2")
 }

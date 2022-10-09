@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	startIndexFrom               = 13
-	jumpLenght                   = 14
-	positionAtFirstIndexOfRecode = -10 // we will using this one to jump back to first data of that record
+	startIndexFrom = 3
+	jumpLenght     = 14
+	recordLenght   = 11
 )
 
 // ReaderXMLHackathon is an object responisble for reader xml and validate data to other file
@@ -33,9 +33,15 @@ func ReadXMLFromHackathon(filePath string) ([]map[string]string, error) {
 // getAttribute is ...
 func (r *ReaderXMLHackathon) getAttribute() ([]map[string]string, error) {
 	data := make([]map[string]string, 0)
-	for i := startIndexFrom; i <= len(r.recordStrings); i += jumpLenght {
+	for i := startIndexFrom; i < len(r.recordStrings); i += jumpLenght {
 		mapData := make(map[string]string)
-		for _, line := range r.recordStrings[i+positionAtFirstIndexOfRecode : i+2] { // loop start from first column of that record to last
+
+		key, _ := r.readTag(r.recordStrings[i])
+		if key != "EMPID" {
+			return nil, fmt.Errorf("error invalid format xml")
+		}
+
+		for _, line := range r.recordStrings[i : i+recordLenght] { // loop start from first column of that record to last
 			key, value := r.readTag(line)
 			mapData[key] = value
 		}

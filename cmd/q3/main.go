@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/markkj/hackathon-season2/internal/csv"
 	"github.com/markkj/hackathon-season2/internal/xml"
@@ -37,7 +38,6 @@ func main() {
 		record := make([]string, len(columnStrings))
 		isValid := true
 		for key, value := range row {
-
 			for i, c := range columnStrings {
 				if key == c {
 					record[i] = value
@@ -49,7 +49,9 @@ func main() {
 			csvFile.AddRecord(record)
 		}
 	}
-	err = csvFile.BuildCsvFile()
+	path, _ := os.Getwd()
+	path += "/q2.csv"
+	err = csvFile.BuildCsvFile(path)
 	if err != nil {
 		fmt.Println(err)
 	}
