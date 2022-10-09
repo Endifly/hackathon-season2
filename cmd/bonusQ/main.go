@@ -7,8 +7,35 @@ import (
 	"github.com/markkj/hackathon-season2/internal/visualization"
 )
 
+var monthNameMap = map[int]string{
+	1:  "January",
+	2:  "February",
+	3:  "March",
+	4:  "April",
+	5:  "May",
+	6:  "June",
+	7:  "July",
+	8:  "August",
+	9:  "September",
+	10: "October",
+	11: "November",
+	12: "December",
+}
+var genderMap = map[int]string{
+	0: "Male",
+	1: "Female",
+}
 
-//TODO: feed the correct data and display this one
+var statusMap = map[int]string{
+	1: "Active",
+	2: "Resigned",
+	3: "Retired",
+}
+
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*),STRFTIME('%Y', hired) AS year
+// FROM DevMountainAnwser
+// GROUP by year
 func addVisualizationForHiredCountByYear(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee hired by year",
@@ -22,8 +49,10 @@ func addVisualizationForHiredCountByYear(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-
-//TODO: feed the correct data and display this one
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*),STRFTIME('%m', birthday) AS month
+// FROM DevMountainAnwser
+// GROUP by month
 func addVisualizationForBirithdayByMonth(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee birithday By month",
@@ -37,7 +66,10 @@ func addVisualizationForBirithdayByMonth(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-//TODO: feed the correct data and display this one
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*), STRFTIME('%Y','now') - STRFTIME('%Y', birthday) AS age
+// FROM DevMountainAnwser
+// GROUP by Age
 func addVisualizationEmployeeAge(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee Age",
@@ -50,7 +82,11 @@ func addVisualizationEmployeeAge(w http.ResponseWriter) {
 	}
 	chart.CreateLineChart(w)
 }
-//TODO: feed the correct data and display this one
+
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*), gender
+// FROM DevMountainAnwser
+// GROUP by gender
 func addVisualizationEmployeeGender(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee Gender",
@@ -63,7 +99,11 @@ func addVisualizationEmployeeGender(w http.ResponseWriter) {
 	}
 	chart.CreateLineChart(w)
 }
-//TODO: feed the correct data and display this one
+
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*), dept
+// FROM DevMountainAnwser
+// GROUP by dept
 func addVisualizationEmployeeDepartment(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee Department",
@@ -77,7 +117,10 @@ func addVisualizationEmployeeDepartment(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-//TODO: feed the correct data and display this one
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*), region
+// FROM DevMountainAnwser
+// GROUP by region
 func addVisualizationEmployeeRegion(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee Region",
@@ -91,7 +134,10 @@ func addVisualizationEmployeeRegion(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-//TODO: feed the correct data and display this one
+// TODO: feed the correct data and display this one
+// SELECT COUNT(*),status, dept
+// FROM DevMountainAnwser
+// GROUP by dept
 func addVisualizationEmployeeStatusByDept(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Employee Status count by Department",
@@ -105,7 +151,7 @@ func addVisualizationEmployeeStatusByDept(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-//TODO: remove this one 
+// TODO: remove this one
 func addVis1(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
@@ -119,7 +165,7 @@ func addVis1(w http.ResponseWriter) {
 	chart.CreateLineChart(w)
 }
 
-//TODO: remove this one 
+// TODO: remove this one
 func addVis2(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
@@ -136,7 +182,7 @@ func addVis2(w http.ResponseWriter) {
 	chart.CreatePieChart(w)
 }
 
-//TODO: remove this one 
+// TODO: remove this one
 func addVis3(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
@@ -150,7 +196,7 @@ func addVis3(w http.ResponseWriter) {
 	chart.CreateScatter(w)
 }
 
-//TODO: remove this one 
+// TODO: remove this one
 func addVis4(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
@@ -164,7 +210,7 @@ func addVis4(w http.ResponseWriter) {
 	chart.CreateWorldMap(w)
 }
 
-//TODO: remove this one 
+// TODO: remove this one
 func addVis5(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
