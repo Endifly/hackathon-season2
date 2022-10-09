@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -68,13 +69,15 @@ func main() {
 			csvFile.AddRecord(record)
 		}
 	}
-	err = csvFile.BuildCsvFile()
+	path, _ := os.Getwd()
+	path += "/q1.csv"
+	err = csvFile.BuildCsvFile(path)
 	if err != nil {
 		fmt.Println(err)
 	}
-	records, err := csv.CSVFileToMap("DevMountain.csv")
+	records, err := csv.CSVFileToMap(path)
 	if err != nil {
 		fmt.Println(err)
 	}
-	json.ExportToJsonFile(records, "DevMountainAnwser")
+	json.ExportToJsonFile(records, "DevMountainAnwser2")
 }

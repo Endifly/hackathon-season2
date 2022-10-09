@@ -13,8 +13,8 @@ type CsvData struct {
 	Records []string
 }
 
-func (c *CsvData) BuildCsvFile() error {
-	csvFile, err := os.Create("DevMountain.csv")
+func (c *CsvData) BuildCsvFile(outPath string) error {
+	csvFile, err := os.Create(outPath)
 	if err != nil {
 		return err
 	}

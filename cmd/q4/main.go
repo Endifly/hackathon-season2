@@ -49,7 +49,7 @@ func main() {
 			csvFile.AddRecord(record)
 		}
 	}
-	err = csvFile.BuildCsvFile()
+	err = csvFile.BuildCsvFile("../../q4.csv")
 	if err != nil {
 		fmt.Println(err)
 	}
