@@ -2,17 +2,20 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/markkj/hackathon-season2/internal/csv"
 	"github.com/markkj/hackathon-season2/internal/xml"
 )
+
+// ** Migration Challenge
+const ()
 
 func main() {
 	data, err := xml.ReadXMLFromHackathon("./data-devclub-1.xml")
 	if err != nil {
 		fmt.Println(err)
 	}
-	dataArr := data.([]interface{})
 	csvFile := &csv.CsvData{
 		Columns: []string{},
 		Records: []string{},
@@ -32,21 +35,26 @@ func main() {
 		"REGION",
 	}
 	csvFile.SetColumn(columnStrings)
-	for _, row := range dataArr {
-		fmt.Println(row)
+	for _, row := range data {
 		record := make([]string, len(columnStrings))
-		for key, value := range row.(map[string]interface{}) {
+		isValid := true
+		for key, value := range row {
 			for i, c := range columnStrings {
 				if key == c {
-					record[i] = value.(string)
+					record[i] = value
 					break
 				}
 			}
 		}
-		csvFile.AddRecord(record)
+		if isValid {
+			csvFile.AddRecord(record)
+		}
 	}
-	err = csvFile.BuildCsvFile()
+	path, _ := os.Getwd()
+	path += "/q2.csv"
+	err = csvFile.BuildCsvFile(path)
 	if err != nil {
 		fmt.Println(err)
 	}
+
 }

@@ -9,6 +9,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+/*
+	SqlField type builder
+*/
 type SqlField struct {
 	schema  []string
 	colName string
@@ -42,18 +45,27 @@ func (f *SqlField) Schema() string {
 	return strings.Join(f.schema, " ")
 }
 
-func NewField(name string) *SqlField {
+// SqlField builder ...
+func Field(name string) *SqlField {
 	f := &SqlField{}
 	f.Name(name)
 	return f
 }
 
 type SqlData struct {
-	Conn *sql.DB
+	Conn      *sql.DB
+	tableName string
 }
 
-func (c *SqlData) CreateTable(tableName string, columns []*SqlField) error {
-	cmd := fmt.Sprintf("create table if not exists ? (id integer primary key autoincrement, title text, author text)")
+func (c *SqlData) UseTable(tableName string) {
+	c.tableName = tableName
+}
+
+func (c *SqlData) UseSchema(columns []*SqlField) error {
+	// schema := ""
+	// schema =
+
+	// cmd := fmt.Sprintf("create table if not exists ? (id integer primary key autoincrement, title text, author text)")
 	stmt, err := c.Conn.Prepare("create table if not exists books (id integer primary key autoincrement, title text, author text)")
 	if err != nil {
 		return err
@@ -86,7 +98,7 @@ func (c *SqlData) AddRow(data []string) error {
 /*
 	alway return db connection
 */
-func getDb(filePath string) SqlData {
+func OpenDB(filePath string) SqlData {
 	_, err := os.Stat(filePath)
 
 	if err != nil {
@@ -110,26 +122,28 @@ func getDb(filePath string) SqlData {
 }
 
 func WriteSql(filePath string) error {
-	db := getDb(filePath)
+	db := OpenDB(filePath)
 	defer db.Conn.Close()
 
 	if db.Conn == nil {
 		fmt.Println("erro")
 	}
 
-	err := db.CreateTable("devMountain2", []*SqlField{
-		NewField("EMPID").PrimaryKey(),
-		NewField("PASSPORT").Text(),
-		NewField("FIRSTNAME").Text(),
-		NewField("LASTNAME").Text(),
-		NewField("GENDER").Int(),
-		NewField("BIRTHDAY").Text(),
-		NewField("NATIONALITY").Text(),
-		NewField("HIRED").Text(),
-		NewField("DEPT").Text(),
-		NewField("POSITION").Text(),
-		NewField("STATUS").Int(),
-		NewField("REGION").Text(),
+	db.UseTable("devMountain2")
+
+	err := db.UseSchema([]*SqlField{
+		Field("EMPID").Int().PrimaryKey(),
+		Field("PASSPORT").Text(),
+		Field("FIRSTNAME").Text(),
+		Field("LASTNAME").Text(),
+		Field("GENDER").Int(),
+		Field("BIRTHDAY").Text(),
+		Field("NATIONALITY").Text(),
+		Field("HIRED").Text(),
+		Field("DEPT").Text(),
+		Field("POSITION").Text(),
+		Field("STATUS").Int(),
+		Field("REGION").Text(),
 	})
 
 	if err != nil {
