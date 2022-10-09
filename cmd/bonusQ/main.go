@@ -19,7 +19,8 @@ func addVisualizationForHiredPerYear(w http.ResponseWriter) {
 	}
 	chart.CreateLineChart(w)
 }
-func addVisualizationForBirithdayByYear(w http.ResponseWriter) {
+
+func addVisualizationForBirithdayByMonth(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
 		Subtitle: "Stil waiting",
@@ -31,6 +32,84 @@ func addVisualizationForBirithdayByYear(w http.ResponseWriter) {
 	}
 	chart.CreateLineChart(w)
 }
+
+func addVisualizationEmployeeAge(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+
+func addVisualizationEmployeeGender(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+
+func addVisualizationEmployeeDepartMent(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+func addVisualizationEmployeeRegion(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+
+func addVisualizationEmployeeStatusByDept(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+
+func addVisualizationHireCountByYear(w http.ResponseWriter) {
+	chart := visualization.Chart{
+		Title:    "Waiting",
+		Subtitle: "Stil waiting",
+		XAxis:    []string{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"},
+		Items: map[string]interface{}{
+			"key":  []int{1, 3, 5, 7, 3, 4, 5},
+			"key2": []int{2, 4, 2, 10, 2, 4, 5},
+		},
+	}
+	chart.CreateLineChart(w)
+}
+
 func addVis1(w http.ResponseWriter) {
 	chart := visualization.Chart{
 		Title:    "Waiting",
